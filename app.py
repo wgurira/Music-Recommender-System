@@ -17,7 +17,6 @@ def get_song_album_cover_url(song_name, artist_name):
     if results and results["tracks"]["items"]:
         track = results["tracks"]["items"][0]
         album_cover_url = track["album"]["images"][0]["url"]
-        print(album_cover_url)
         return album_cover_url
     else:
         return "https://i.postimg.cc/0QNxYz4V/social.png"
@@ -28,7 +27,15 @@ def recommend_songs(song_title, data, cosine_sim, top_n=10):
         return f"No recommendations found: '{song_title}' is not in the dataset."
 
     # Find the index of the song that matches the title
-    idx = data[data['song'] == song_title].index[0]
+    song_data = data[data['song'] == song_title]
+    if song_data.empty:
+        return f"No recommendations found: '{song_title}' is not properly indexed."
+
+    idx = song_data.index[0]
+
+    # Verify if the index is within the bounds of the cosine similarity matrix
+    if idx >= len(cosine_sim):
+        return f"Index error: Index {idx} out of range for cosine similarity matrix."
 
     # Get the pairwise similarity scores of all songs with that song
     sim_scores = list(enumerate(cosine_sim[idx]))
@@ -49,7 +56,6 @@ def recommend_songs(song_title, data, cosine_sim, top_n=10):
 data = pickle.load(open('data_sampled.pkl','rb'))
 cosine_sim = pickle.load(open('similarity.pkl','rb'))
 
-
 # Main Streamlit app
 def main():
     st.title('Song Recommender')
@@ -60,7 +66,8 @@ def main():
             st.write(recommendations)
         else:
             st.write('Top recommendations:')
-            st.write(recommendations.tolist())
+            for recommended_song in recommendations:
+                st.write(recommended_song)
 
 if __name__ == '__main__':
     main()
