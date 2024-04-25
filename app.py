@@ -38,7 +38,7 @@ def recommend_songs(song_title, data, cosine_sim, top_n=10):
     return recommended_songs[['song', 'artist']]
 
 # Load data and cosine similarity matrix
-data = pickle.load(open('data_sampled.pkl','rb'))
+data = pickle.load(open('df.pkl','rb'))
 cosine_sim = pickle.load(open('similarity.pkl','rb'))
 
 def main():
@@ -50,7 +50,7 @@ Members:
 - Cyprian Masvikeni R205537V HDSC
 """)
     st.title('Music Recommendation System')
-    song = st.text_input("Enter a song title e.g Ahe's My Kind Of Girl:")
+    song = st.text_input("Enter a song title. Use e.g Ahe's My Kind Of Girl:")
     if st.button('See Recommendations'):
         recommendations = recommend_songs(song, data, cosine_sim)
         if isinstance(recommendations, str):
