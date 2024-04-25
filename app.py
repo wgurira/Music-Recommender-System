@@ -49,8 +49,9 @@ def recommend_songs(song_title, data, cosine_sim, top_n=10):
     # Get the song indices
     song_indices = [i[0] for i in sim_scores]
 
-    # Return the top-n most similar songs
-    return data['song'].iloc[song_indices]
+    # Return the top-n most similar songs along with their artist names
+    recommended_songs = data.iloc[song_indices]
+    return recommended_songs[['song', 'artist']]
 
 # Load your data and cosine similarity matrix
 data = pickle.load(open('data_sampled.pkl','rb'))
@@ -66,8 +67,10 @@ def main():
             st.write(recommendations)
         else:
             st.write('Top recommendations:')
-            for recommended_song in recommendations:
-                st.write(recommended_song)
+            for index, row in recommendations.iterrows():
+                album_cover_url = get_song_album_cover_url(row['song'], row['artist'])
+                st.image(album_cover_url, width=300)
+                st.write(f"{row['song']} by {row['artist']}")
 
 if __name__ == '__main__':
     main()
