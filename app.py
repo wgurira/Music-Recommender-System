@@ -50,7 +50,7 @@ Members:
 - Cyprian Masvikeni R205537V HDSC
 """)
     st.title('Music Recommendation System')
-    song = st.text_input('Enter a song title:')
+    song = st.text_input('Enter a song title e.g Ahe's My Kind Of Girl:')
     if st.button('See Recommendations'):
         recommendations = recommend_songs(song, data, cosine_sim)
         if isinstance(recommendations, str):
