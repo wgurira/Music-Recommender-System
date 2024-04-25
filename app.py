@@ -22,6 +22,9 @@ def get_song_album_cover_url(song_name, artist_name):
         return "https://i.postimg.cc/0QNxYz4V/social.png"
 
 def recommend_songs(song_title, data, cosine_sim, top_n=10):
+    # Trim leading and trailing whitespace from the song title
+    song_title = song_title.strip()
+
     # Check if the song is in the dataset
     if song_title not in data['song'].values:
         return f"No recommendations found: '{song_title}' is not in the dataset."
@@ -59,18 +62,30 @@ cosine_sim = pickle.load(open('similarity.pkl','rb'))
 
 # Main Streamlit app
 def main():
-    st.title('Song Recommender')
+     st.write("""
+Members:
+- Gurira Wesley P R204433P HAI
+- Sendekera Cousins R207642E HAI
+- Ryan Kembo R205723E HAI
+- Cyprian Masvikeni R205537V HDSC
+""")
+    st.title('Music Recommendation System')
     song = st.text_input('Enter a song title:')
-    if st.button('Recommend'):
+    if st.button('See Recommandations'):
         recommendations = recommend_songs(song, data, cosine_sim)
         if isinstance(recommendations, str):
             st.write(recommendations)
         else:
-            st.write('Top recommendations:')
-            for index, row in recommendations.iterrows():
-                album_cover_url = get_song_album_cover_url(row['song'], row['artist'])
-                st.image(album_cover_url, width=300)
-                st.write(f"{row['song']} by {row['artist']}")
+            st.write('Top 10 recommendations:')
+            cols_per_row = 4
+            rows = [recommendations.iloc[i:i + cols_per_row] for i in range(0, len(recommendations), cols_per_row)]
+            for row in rows:
+                cols = st.columns(cols_per_row)
+                for idx, (col, (index, data_row)) in enumerate(zip(cols, row.iterrows())):
+                    with col:
+                        album_cover_url = get_song_album_cover_url(data_row['song'], data_row['artist'])
+                        st.image(album_cover_url, width=100)
+                        st.write(f"{data_row['song']} by {data_row['artist']}")
 
 if __name__ == '__main__':
     main()
