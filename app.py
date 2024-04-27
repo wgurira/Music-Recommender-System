@@ -44,19 +44,19 @@ cosine_sim = pickle.load(open('similarity.pkl','rb'))
 def main():
     st.write("""
 Members:
+- Gurira Wesley P R204433P HAI
+- Sendekera Cousins R207642E HAI
+- Ryan Kembo R205723E HAI
+- Cyprian Masvikeni R205537V HDSC
+""")
+    st.title('Music Recommendation System')
+    st.write("""
+Suggested Songs:
 - Ahe's My Kind Of Girl
 - Back In Love Again
 - At Seventeen
 - Look At Me
 - Abide With Me
-""")
-    st.title('Music Recommendation System')
-    st.write("""
-Suggested Songs:
-- Gurira Wesley P R204433P HAI
-- Sendekera Cousins R207642E HAI
-- Ryan Kembo R205723E HAI
-- Cyprian Masvikeni R205537V HDSC
 """)
     song = st.text_input("Enter a song title:")
     if st.button('See Recommendations'):
